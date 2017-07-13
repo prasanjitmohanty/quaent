@@ -21,6 +21,15 @@ class ContentQualityAlgorithm {
                             .element('.url-card-total span:nth-child(2)')
                             .getText().then((totalCount) => {
                                 console.log('totalCount :' + totalCount)
+                                totalPoints+= parseInt(totalCount);
+                            })
+                            //Get readability score Flesch Kincaid Reading Ease
+                            .url(`https://www.webpagefx.com/tools/read-able/check.php?tab=Test+By+Url&uri=${url}`)
+                            .waitForExist('#tabs-1 > div > div:nth-child(2) > table > tbody > tr:nth-child(1) > td:nth-child(2)',15000)
+                            .element('#tabs-1 > div > div:nth-child(2) > table > tbody > tr:nth-child(1) > td:nth-child(2)')
+                            .getText().then((totalCount) => {
+                                console.log('totalCount :' + totalCount)
+                                totalPoints+= parseInt(totalCount);
                                 resolve(totalPoints);
                                 program.kill();
                             })
