@@ -1,6 +1,5 @@
-const phantomjs = require('phantomjs-prebuilt');
-const webdriverio = require('webdriverio');
-const wdOpts = { desiredCapabilities: { browserName: 'phantomjs' } };
+const request = require('request-promise-native');
+const cheerio = require('cheerio');
 const dummyData = [{
     link: 'https://venturebeat.com/2016/04/13/3-trends-driving-the-chatbot-revolution/',
     linkText: '3 trends driving the chatbot revolution | VentureBeat ...',
@@ -50,46 +49,36 @@ const dummyData = [{
 
 class SearchHelper {
 
-    /**
-     * @param  {} callback
-     */
-    getArticleLinks(searchText) {
-
-        let searchQuery = searchText.split(' ').join('+');
-        let base_url = `https://duckduckgo.com/q=${searchQuery}`;
+    search(opts) {
+        
         return new Promise(
             (resolve, reject) => {
-                try {
-                    // phantomjs.run('--webdriver=4444').then(program => {
-                    //     let searchResults = [];
-                    //     webdriverio.remote(wdOpts).init()
-                    //         .url(base_url)
-                    //         .elements('.result__a').getAttribute('href').then(links => {
-                    //             links.forEach((lnk) => {
-                    //                 searchResults.push({
-                    //                     link: lnk,
-                    //                     linkText: '',
-                    //                     snippet: ''
-                    //                 })
-                    //             });
-                    //         }).elements('.result__a').getText().then(linkTexts => {
-                    //             for (let idx = 0; idx < searchResults.length; idx++) {
-                    //                 searchResults[idx].linkText = linkTexts[idx];
-                    //             }
-                    //         }).elements('.result__snippet').getHTML().then(linkSnippets => {
-                    //             for (let idx = 0; idx < searchResults.length; idx++) {
-                    //                 searchResults[idx].snippet = linkSnippets[idx];
-                    //             }
-                    //             program.kill();
-                    //             resolve(searchResults);// quits PhantomJS 
-                    //         })
-                    // });
-
-                    resolve(dummyData);
-
-                } catch (error) {
-                    reject('Not able to get article Links: ' + error);
-                }
+                let max = opts.max || 0
+                 delete opts.max
+                let urls = [];
+                request({
+                    method: 'GET',
+                    baseUrl: 'https://duckduckgo.com',
+                    uri: '/html',
+                    qs: opts
+                }).then((response) => {
+                    //console.log(response);
+                    let $ = cheerio.load(response)
+                    let links = $('#links .links_main a.result__a')
+                    links.each((i, elem) => {
+                        if ((max > 0 && urls.length < max) || max === 0) {
+                            let url = $(elem).attr('href');
+                            let title = $(elem).text();
+                            .result__snippet
+                            url = unescape(url.substring(url.indexOf('http')));
+                            urls.push({link:url,linkText:title});
+                        }
+                    })
+                    console.log(urls);
+                    resolve(urls);
+                }).catch((error) => {
+                    reject(error);
+                });
             });
     }
 }
