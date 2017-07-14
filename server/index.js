@@ -17,7 +17,10 @@
     //const searchText = 'What are the upcoming trends on chatbots?';
     const searchText = req.params['searchText'];
     console.log(searchText);
-    searchHelper.getArticleLinks(searchText).then(links => {
+    searchHelper.search({
+      q: searchText,
+      max: 10
+    }).then(links => {
       res.json(links);
     });
     // Hard coding for simplicity. Pretend this hits a real database

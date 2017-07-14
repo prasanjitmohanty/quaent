@@ -69,7 +69,6 @@ class SearchHelper {
                         if ((max > 0 && urls.length < max) || max === 0) {
                             let url = $(elem).attr('href');
                             let title = $(elem).text();
-                            .result__snippet
                             url = unescape(url.substring(url.indexOf('http')));
                             urls.push({link:url,linkText:title});
                         }

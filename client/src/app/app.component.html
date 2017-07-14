@@ -1,7 +1,7 @@
 <!--The whole content below can be removed with the new code.-->
 
 <h1> {{title}} </h1>
-<input name="search" #searchTerm (keyup.enter)="performSearch(searchTerm)"> <button (click)="performSearch(searchTerm)">Search</button> <br>
+<input name="search" #searchTerm (keyup.enter)="performSearch($event.target.value)"> <button (click)="performSearch(searchTerm)">Search</button> <br>
 
 <!--<input
     (keyup)="searchTerm$.next($event.target.value)">-->
