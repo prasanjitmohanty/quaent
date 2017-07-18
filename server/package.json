@@ -24,6 +24,7 @@
     "cheerio": "1.0.0-rc.2",
     "cors": "2.8.3",
     "express": "4.15.3",
+    "metascraper": "1.0.7",
     "phantomjs-prebuilt": "^2.1.14",
     "request-promise-native": "1.0.4",
     "webdriverio": "^4.8.0"
