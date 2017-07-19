@@ -68,9 +68,8 @@ class SearchHelper {
                     links.each((i, elem) => {
                         if ((max > 0 && urls.length < max) || max === 0) {
                             let url = $(elem).attr('href');
-                            let title = $(elem).text();
                             url = unescape(url.substring(url.indexOf('http')));
-                            urls.push({link:url,linkText:title});
+                            urls.push(url);
                         }
                     })
                     console.log(urls);

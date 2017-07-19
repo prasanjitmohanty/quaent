@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,ViewEncapsulation } from '@angular/core';
 import { SearchService } from './search.service';
 import { Subject } from 'rxjs/Subject';
 
@@ -6,6 +6,7 @@ import { Subject } from 'rxjs/Subject';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
+   encapsulation: ViewEncapsulation.None,
   providers: [SearchService]
 })
 export class AppComponent {
