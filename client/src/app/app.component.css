@@ -1,0 +1,12 @@
+.example-card {
+  
+}
+
+md-grid-tile {
+  /* background: lightblue; */
+}
+
+.example-header-image {
+  background-image: url('../assets/images/shiba1.jpg');
+  background-size: cover;
+}

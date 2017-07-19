@@ -1,15 +1,51 @@
 <!--The whole content below can be removed with the new code.-->
+<md-sidenav-container>
+  <md-toolbar color="primary">
+  <span>QUAENT</span>
 
-<h1> {{title}} </h1>
-<input name="search" #searchTerm (keyup.enter)="performSearch($event.target.value)"> <button (click)="performSearch(searchTerm)">Search</button> <br>
+</md-toolbar>
+<div>
+  <div>
+    <h1> {{title}} </h1>
+    <input name="search" #searchTerm (keyup.enter)="performSearch($event.target.value)"> <button (click)="performSearch(searchTerm)">Search</button>    <br>
+  </div>
+  <br/>
 
-<!--<input
+  <!--<input
     (keyup)="searchTerm$.next($event.target.value)">-->
 
-<ul *ngIf="results">
+  <!-- <ul *ngIf="results">
   <li *ngFor="let result of results | slice:0:9">
-    <a href="{{ result.link }}" target="_blank">
-      {{ result.linkText }}
-    </a>
+    <!-- <a href="{{ result.url }}" target="_blank">
+      {{ result.title }}
+    </a> -->
+  <!-- 
   </li>
-</ul>
+</ul> -->
+
+  <div>
+    <md-grid-list cols="5" rowHeight="1:1" *ngIf="results">
+      <md-grid-tile *ngFor="let result of results | slice:0:20">
+        <md-card>
+          <md-card-header>
+            <img md-card-avatar src="{{ result.image }}">
+            <md-card-title> {{ result.title }}</md-card-title>
+            
+          </md-card-header>
+         <!--  -->
+          <md-card-content>
+            <p>
+              {{ result.description }}
+            </p>
+          </md-card-content>
+          <md-card-actions>
+            <a href="{{ result.url }}" md-button target="_blank">
+           View
+          </a>
+          </md-card-actions>
+        </md-card>
+      </md-grid-tile>
+    </md-grid-list>
+  </div>
+</div>
+</md-sidenav-container>
