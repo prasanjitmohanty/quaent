@@ -5,44 +5,47 @@ const sociare = require('sociare-counter');
 class SocialShareCount {
 
     getShareCount(url, callback) {
+        function getFBShareCount(url, callback) {
+            let baseUrl = `http://graph.facebook.com/?id=${url}`;
+            request({
+                method: 'GET',
+                uri: baseUrl,
+                json: true,
+            }).then((response) => {
+                callback(null, response.share.share_count);
+            }).catch((error) => {
+                callback(null, 0);
+            });
+        }
+
+        function getOtherPlatformShareCount(url, callback) {
+            sociare.getCounts(url, {
+                networks: ['linkedin', 'pinterest']
+            }).then((counts) => {
+                callback(null, counts['linkedin'] + counts['pinterest']);
+            });
+
+        }
         async.parallel([
             (callback) => {
-                this.getFBShareCount(url, callback);
+                getFBShareCount(url, callback);
             },
             (callback) => {
-                this.getOtherPlatformShareCount(url, callback);
+                getOtherPlatformShareCount(url, callback);
             },
 
         ], (err, results) => {
-            console.log(results);
-            var totalCount = results.reduce((sum, value)=> {
+            //console.log(results);
+            var totalCount = results.reduce((sum, value) => {
                 return sum + value;
             }, 0);
 
-            callback(null, totalCount);
+            let dict = {};
+            dict[url] = totalCount;
+            callback(null, dict);
         });
     }
 
-    getFBShareCount(url, callback) {
-        let baseUrl = `http://graph.facebook.com/?id=${url}`;
-        request({
-            method: 'GET',
-            uri: baseUrl,
-            json: true,
-        }).then((response) => {
-            callback(null, response.share.share_count);
-        }).catch((error) => {
-            callback(null, 0);
-        });
-    }
 
-    getOtherPlatformShareCount(url, callback) {
-        sociare.getCounts(url, {
-            networks: ['linkedin', 'pinterest']
-        }).then((counts) => {
-            callback(null, counts['linkedin'] + counts['pinterest']);
-        });
-
-    }
 }
 module.exports = new SocialShareCount();
