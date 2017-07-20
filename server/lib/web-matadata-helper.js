@@ -26,8 +26,12 @@ class WebMetadataHelper {
                 });
                 return meta;
             }
+
+
             const MY_RULES = Object.assign(metaScraper.RULES, {
-                meta: getMeta
+                //meta: getMeta
+                totalVideos:($)=>{return $('body iframe').length},
+                totalImages:($)=>{return $('body img').length}
             });
             
             metaScraper.scrapeUrl(url, MY_RULES).then((metadata) => {

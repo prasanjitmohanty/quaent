@@ -1,320 +1,111 @@
 const searchHelper = require('./search-helper');
 const metadataHelper = require('./web-matadata-helper');
+const socialShareCont = require('./social-share-count');
+const readabilityScore = require('./redability-score');
+//
 const async = require('async');
 
-const data = [
-    {
-        "author": null,
-        "date": "2017-01-30T12:00:00.000Z",
-        "description": null,
-        "image": "//upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Telegram_tourism_chatbot.png/200px-Telegram_tourism_chatbot.png",
-        "publisher": null,
-        "title": "Chatbot - Wikipedia",
-        "url": "https://en.wikipedia.org/wiki/Chatbot",
-        "meta": {
-            "generator": "MediaWiki 1.30.0-wmf.9",
-            "referrer": "origin-when-cross-origin"
-        }
-    },
-    {
-        "author": "10203247768089464",
-        "date": "2016-04-20T11:46:02.836Z",
-        "description": "Everything you need to know.",
-        "image": "https://cdn-images-1.medium.com/max/1200/1*QNDwvpEdMtiv18XIJe0Ukg.png",
-        "publisher": "Chatbots Magazine",
-        "title": "The Complete Beginner’s Guide To Chatbots – Chatbots Magazine",
-        "url": "https://chatbotsmagazine.com/the-complete-beginner-s-guide-to-chatbots-8280b7b906ca",
-        "meta": {
-            "Content-Type": "text/html; charset=utf-8",
-            "viewport": "width=device-width, initial-scale=1",
-            "title": "The Complete Beginner’s Guide To Chatbots – Chatbots Magazine",
-            "referrer": "unsafe-url",
-            "description": "What are chatbots? Why are they such a big opportunity? How do they work? How can I build one? How can I meet other people interested in chatbots? (p.s. I just launched Octane AI to help companies…",
-            "theme-color": "#000000",
-            "og:title": "The Complete Beginner’s Guide To Chatbots – Chatbots Magazine",
-            "og:url": "https://chatbotsmagazine.com/the-complete-beginner-s-guide-to-chatbots-8280b7b906ca",
-            "og:image": "https://cdn-images-1.medium.com/max/1200/1*QNDwvpEdMtiv18XIJe0Ukg.png",
-            "fb:app_id": "542599432471018",
-            "og:description": "Everything you need to know.",
-            "twitter:description": "Everything you need to know.",
-            "twitter:image:src": "https://cdn-images-1.medium.com/max/1200/1*QNDwvpEdMtiv18XIJe0Ukg.png",
-            "author": "Matt Schlicht",
-            "og:type": "article",
-            "twitter:card": "summary_large_image",
-            "article:publisher": "https://www.facebook.com/chatbotsmagazine",
-            "article:author": "10203247768089464",
-            "robots": "index, follow",
-            "article:published_time": "2016-04-20T11:46:02.836Z",
-            "twitter:creator": "@MattPRD",
-            "twitter:site": "@chatbotsmag",
-            "og:site_name": "Chatbots Magazine",
-            "twitter:app:name:iphone": "Medium",
-            "twitter:app:id:iphone": "828256236",
-            "twitter:app:url:iphone": "medium://p/8280b7b906ca",
-            "al:ios:app_name": "Medium",
-            "al:ios:app_store_id": "828256236",
-            "al:android:package": "com.medium.reader",
-            "al:android:app_name": "Medium",
-            "al:ios:url": "medium://p/8280b7b906ca",
-            "al:android:url": "medium://p/8280b7b906ca",
-            "al:web:url": "https://chatbotsmagazine.com/the-complete-beginner-s-guide-to-chatbots-8280b7b906ca"
-        }
-    },
-    {
-        "author": null,
-        "date": null,
-        "description": "Cleverbot - Chat with a bot about anything and everything - AI learns from people, in context, and imitates",
-        "image": null,
-        "publisher": "Cleverbot",
-        "title": "Cleverbot",
-        "url": "http://www.cleverbot.com/",
-        "meta": {
-            "Content-Type": "text/html; charset=utf-8",
-            "viewport": "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0",
-            "google-site-verification": "aOcdzJfQ93zj7mCWLuJo4LK89wKEWLUmSibVKNkTF5Q",
-            "robots": "all",
-            "revisit-after": "30 days",
-            "og:title": "Cleverbot",
-            "og:type": "website",
-            "og:url": "http://www.cleverbot.com/",
-            "og:image": "/images/cleverbot226x94.jpg",
-            "og:site_name": "Cleverbot",
-            "fb:admins": "100002487181748,600004127,676764727",
-            "og:description": "Cleverbot - Chat with a bot about anything and everything - AI learns from people, in context, and imitates",
-            "description": "Cleverbot - Chat with a bot about anything and everything - AI learns from people, in context, and imitates",
-            "keywords": "cleverbot,clever,bot,ai,artificial,intelligence,actual,actually,intelligent,chat,discuss,talk,converse,conversation,speak,learns,learning,imitates,context"
-        }
-    },
-    {
-        "author": "Biz Carson",
-        "date": "2016-04-09T00:00:00.000Z",
-        "description": "Get ready to start using chatbots instead of apps.",
-        "image": "http://static5.uk.businessinsider.com/image/5708fdc1dd0895763b8b49e8-1190-625/chatbots-explained-why-the-worlds-most-powerful-tech-companies-think-theyre-the-biggest-thing-since-the-iphone.jpg",
-        "publisher": "Business Insider",
-        "title": "CHATBOTS EXPLAINED: Why the world's most powerful tech companies think they're the biggest thing since the iPhone",
-        "url": "http://uk.businessinsider.com/what-are-chatbots-and-who-is-building-them-2016-4",
-        "meta": {
-            "X-UA-Compatible": "IE=edge",
-            "content-type": "text/html;charset=utf-8",
-            "date": "2016-04-09",
-            "sailthru.date": "2016-04-09",
-            "news_keywords": "Features, chat bots, chat apps, Facebook Messenger, Amazon Echo, Microsoft, Microsoft Cortana, Apple, Siri, Twitter, Google, Viv Labs, Kik, Biz Carson",
-            "sailthru.tags": "Features, chat bots, chat apps, Facebook Messenger, Amazon Echo, Microsoft, Microsoft Cortana, Apple, Siri, Twitter, Google, Viv Labs, Kik, Biz Carson",
-            "description": "Get ready to start using chatbots instead of apps.",
-            "sailthru.description": "Get ready to start using chatbots instead of apps.",
-            "title": "CHATBOTS EXPLAINED: Why the world's most powerful tech companies think they're the biggest thing since the iPhone",
-            "sailthru.verticals": "tech,more",
-            "sailthru.title": "CHATBOTS EXPLAINED: Why the world's most powerful tech companies think they're the biggest thing since the iPhone",
-            "tbi-image": "http://static2.uk.businessinsider.com/image/5708fdb6dd0895763b8b49d5/chatbots-explained-why-the-worlds-most-powerful-tech-companies-think-theyre-the-biggest-thing-since-the-iphone.jpg",
-            "sailthru.image.full": "http://static2.uk.businessinsider.com/image/5708fdb6dd0895763b8b49d5/chatbots-explained-why-the-worlds-most-powerful-tech-companies-think-theyre-the-biggest-thing-since-the-iphone.jpg",
-            "sailthru.image.thumb": "http://static2.uk.businessinsider.com/image/5708fdb6dd0895763b8b49d5-50-50/chatbots-explained-why-the-worlds-most-powerful-tech-companies-think-theyre-the-biggest-thing-since-the-iphone.jpg",
-            "sailthru.author": "Biz Carson",
-            "og:title": "CHATBOTS EXPLAINED: Why the world's most powerful tech companies think they're the biggest thing since the iPhone",
-            "og:description": "Get ready to start using chatbots instead of apps.",
-            "og:type": "article",
-            "og:url": "http://uk.businessinsider.com/what-are-chatbots-and-who-is-building-them-2016-4",
-            "og:site_name": "Business Insider",
-            "fb:app_id": "155043519637",
-            "article:publisher": "BusinessInsiderUK",
-            "author": "Biz Carson, Business Insider",
-            "twitter:url": "http://uk.businessinsider.com/what-are-chatbots-and-who-is-building-them-2016-4",
-            "twitter:title": "CHATBOTS EXPLAINED: Why the world's most powerful tech companies think they're the biggest thing since the iPhone",
-            "twitter:description": "Get ready to start using chatbots instead of apps.",
-            "twitter:card": "summary_large_image",
-            "twitter:image": "http://static2.uk.businessinsider.com/image/5708fdc1dd0895763b8b49e8-506-253/chatbots-explained-why-the-worlds-most-powerful-tech-companies-think-theyre-the-biggest-thing-since-the-iphone.jpg",
-            "twitter:creator": "bizcarson",
-            "twitter:site": "BIUK_Tech",
-            "article:author": "http://uk.businessinsider.com/author/biz-carson",
-            "og:image": "http://static5.uk.businessinsider.com/image/5708fdc1dd0895763b8b49e8-1190-625/chatbots-explained-why-the-worlds-most-powerful-tech-companies-think-theyre-the-biggest-thing-since-the-iphone.jpg",
-            "fb:pages": "1649495281942842",
-            "tbi-vertical": "tech",
-            "viewport": "width=1024",
-            "apple-mobile-web-app-title": "Business Insider",
-            "application-name": "Business Insider",
-            "msapplication-TileColor": "#185f7c",
-            "msapplication-TileImage": "http://static2.uk.businessinsider.com/assets/images/uk/favicons/mstile-144x144.png?v=BI-UK-2016-03-31",
-            "theme-color": "#185f7c",
-            "linkedin:owner": "mid:1d5f7b"
-        }
-    },
-    {
-        "author": "John Rampton",
-        "date": "2017-02-28T19:30:00.000Z",
-        "description": "Having a website became standard for every business years ago. That same process is just beginning for chatbots.",
-        "image": "https://assets.entrepreneur.com/content/3x2/1300/20170227225902-GettyImages-555799115.jpeg",
-        "publisher": "Entrepreneur",
-        "title": "Top 10 Best Chatbot Platform Tools to Build Chatbots for Your Business",
-        "url": "https://www.entrepreneur.com/article/289788",
-        "meta": {
-            "globalsign-domain-verification": "MT3LmRzGYPgORWLlSBkPpAUpBDH9kl8xxYmB6FjtjY",
-            "Content-type": "text/html; charset=utf-8",
-            "copyright": "Copyright 2017 Entrepreneur Media, Inc. All rights reserved.",
-            "X-UA-Compatible": "IE=edge",
-            "viewport": "width=device-width,initial-scale=1.0,maximum-scale=1.0",
-            "apple-mobile-web-app-capable": "yes",
-            "robots": "index,follow,NOODP",
-            "googlebot": "index,follow,NOODP",
-            "msvalidate.01": "54B5AAADAA61BB7748D0BA219F04B657",
-            "msapplication-config": "none",
-            "verify-v1": "VytPswCXjUV52BPf9/JrqfKb64cLEpXc4JqfxtlVlME=",
-            "google-site-verification": "j89zX5NotAYNRfZwuCAeYpH7TnOCKSFupnj9FrMps0E",
-            "google-site-verifications": [
-                "j89zX5NotAYNRfZwuCAeYpH7TnOCKSFupnj9FrMps0E",
-                "BpKqlkTvR3VgkOSfbJnY-nTEpU5L_JZ-0T48pWf6EU4"
-            ],
-            "linkedin:owner": "mid:21884750",
-            "fb:app_id": "279152967822",
-            "fb:pages": "35585623895",
-            "og:site_name": "Entrepreneur",
-            "article:publisher": "https://www.facebook.com/EntMagazine",
-            "edition": "us",
-            "contentEdition": "us",
-            "description": "Having a website became standard for every business years ago. That same process is just beginning for chatbots.",
-            "keywords": "Customer Service,Technology,Artificial Intelligence,Chat apps,Chatbots",
-            "last-modified": "2017-07-17@13:17:36 UTC",
-            "unitName": "/6280/Entrepreneur/article",
-            "author": "John Rampton",
-            "original-source": "https://www.entrepreneur.com/article/289788",
-            "og:title": "Top 10 Best Chatbot Platform Tools to Build Chatbots for Your Business",
-            "og:description": "Having a website became standard for every business years ago. That same process is just beginning for chatbots.",
-            "og:url": "https://www.entrepreneur.com/article/289788",
-            "og:image": "https://assets.entrepreneur.com/content/3x2/1300/20170227225902-GettyImages-555799115.jpeg",
-            "og:type": "article",
-            "sailthru.date": "2017-02-28T19:30:00Z",
-            "sailthru.title": "Top 10 Best Chatbot Platform Tools to Build Chatbots for Your Business",
-            "sailthru.tags": "Customer Service,Technology,Artificial Intelligence,Chat apps,Chatbots",
-            "sailthru.author": "John Rampton",
-            "sailthru.vars": "edition:us",
-            "article:published_time": "2017-02-28T19:30:00Z",
-            "article:modified_time": "2017-07-17@13:17:36 UTC",
-            "article:tag": "Customer Service,Technology,Artificial Intelligence,Chat apps,Chatbots",
-            "twitter:card": "summary_large_image",
-            "twitter:site": "@Entrepreneur",
-            "twitter:creator": "@johnrampton",
-            "twitter:title": "Top 10 Best Chatbot Platform Tools to Build Chatbots for Your Business",
-            "twitter:description": "Having a website became standard for every business years ago. That same process is just beginning for chatbots.",
-            "twitter:url": "https://www.entrepreneur.com/article/289788",
-            "twitter:image:src": "https://assets.entrepreneur.com/content/3x2/1300/20170227225902-GettyImages-555799115.jpeg",
-            "twitter:domain": "entrepreneur.com"
-        }
-    },
-    {
-        "author": "Blake Morgan",
-        "date": "2017-06-08T00:00:00.000Z",
-        "description": "Customers are ready for chatbots, and the technology is here to take advantage of chatbot’s potential and forever change how brands engage with customers. Chatbot technology is constantly improving, and it can be applied to a number of industries and has had success in just about every space.",
-        "image": "https://specials-images.forbesimg.com/imageserve/548473441/640x434.jpg?fit=scale",
-        "publisher": "Forbes",
-        "title": "How Chatbots Improve Customer Experience In Every Industry: An Infograph",
-        "url": "https://www.forbes.com/sites/blakemorgan/2017/06/08/how-chatbots-improve-customer-experience-in-every-industry-an-infograph/",
-        "meta": {
-            "referrer": "origin-when-cross-origin",
-            "description": "Customers are ready for chatbots, and the technology is here to take advantage of chatbot’s potential and forever change how brands engage with customers. Chatbot technology is constantly improving, and it can be applied to a number of industries and has had success in just about every space.",
-            "author": "Blake Morgan",
-            "viewport": "width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no",
-            "prerender-status-code": "{{meta.code}}",
-            "apple-itunes-app": "app-id=588647136",
-            "og:title": "How Chatbots Improve Customer Experience In Every Industry: An Infograph",
-            "og:site_name": "Forbes",
-            "og:url": "https://www.forbes.com/sites/blakemorgan/2017/06/08/how-chatbots-improve-customer-experience-in-every-industry-an-infograph/",
-            "og:image": "https://specials-images.forbesimg.com/imageserve/548473441/640x434.jpg?fit=scale",
-            "og:image:type": "image/jpeg,image/gif,image/png",
-            "og:description": "Customers are ready for chatbots, and the technology is here to take advantage of chatbot’s potential and forever change how brands engage with customers. Chatbot technology is constantly improving, and it can be applied to a number of industries and has had success in just about every space.",
-            "og:updated_time": "2017-06-09T14:36:29-04:00",
-            "article:publisher": "https://www.facebook.com/forbes",
-            "article:author": "http://www.facebook.com/https://www.facebook.com/CustomerExperienceBlake/",
-            "fb:app_id": "123694841080850",
-            "twitter:card": "summary_large_image",
-            "twitter:site": "@forbes",
-            "twitter:title": "How Chatbots Improve Customer Experience In Every Industry: An Infograph",
-            "twitter:description": "Customers are ready for chatbots, and the technology is here to take advantage of chatbot’s potential and forever change how brands engage with customers. Chatbot technology is constantly improving, and it can be applied to a number of industries and has had success in just about every space.",
-            "twitter:image": "https://specials-images.forbesimg.com/imageserve/548473441/640x434.jpg?fit=scale",
-            "og:type": "article",
-            "article:section": "Leadership",
-            "article:section_url": "//www.forbes.com/leadership",
-            "article:id": "blogAndPostId/blog/post/3541-3666",
-            "article:published": "2017-06-08",
-            "article:modified": "2017-06-09",
-            "twitter:creator": "@BlakeMichelleM"
-        }
-    },
-    {
-        "author": null,
-        "date": null,
-        "description": "Affordable Chatbot Development Online Services. Hire a freelance chat bot specialist and get your project delivered remotely online",
-        "image": "https://assetsv2.fiverrcdn.com/assets/v2_globals/fiverr-logo-new-green-9e65bddddfd33dfcf7e06fc1e51a5bc5.png",
-        "publisher": "Fiverr.com",
-        "title": "Chatbot Creation | Fiverr",
-        "url": "https://www.fiverr.com/categories/programming-tech/chatbots",
-        "meta": {
-            "X-UA-Compatible": "IE=edge,chrome=1",
-            "content-script-type": "text/javascript",
-            "twitter:widgets:csp": "on",
-            "viewport": "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
-            "apple-mobile-web-app-capable": "yes",
-            "apple-mobile-web-app-status-bar-style": "black-translucent",
-            "msvalidate.01": "3F52B25E73272C20556A0FA52ABCC61F",
-            "google-signin-clientid": "1060018310736-l2r63l6edmjo06u90605n3ireop649b9.apps.googleusercontent.com",
-            "google-signin-scope": "https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read",
-            "google-signin-requestvisibleactions": "http://schemas.google.com/AddActivity",
-            "google-signin-cookiepolicy": "single_host_origin",
-            "description": "Affordable Chatbot Development Online Services. Hire a freelance chat bot specialist and get your project delivered remotely online",
-            "fb:admins": "100003318459138",
-            "fb:adminss": [
-                "100003318459138",
-                "553942952",
-                "100004143073860"
-            ],
-            "fb:app_id": "202127659076",
-            "dynamic_cdn_url": "https://sg.fiverrcdn.com",
-            "og:site_name": "Fiverr.com",
-            "og:type": "website",
-            "og:locale": "en_US",
-            "og:title": "Chatbot Creation | Fiverr",
-            "og:image": "https://assetsv2.fiverrcdn.com/assets/v2_globals/fiverr-logo-new-green-9e65bddddfd33dfcf7e06fc1e51a5bc5.png",
-            "og:description": "Affordable Chatbot Development Online Services. Hire a freelance chat bot specialist and get your project delivered remotely online",
-            "og:url": "https://www.fiverr.com/categories/programming-tech/chatbots"
-        }
-    },
-    {
-        "author": "Christine Crandell",
-        "date": "2016-10-23T00:00:00.000Z",
-        "description": "Verizon is excited about chatbots and the advances in AI. Technology has provided huge benefits and it's easy to get carried away with the allure of human-machine relationships. Yet, lurking in the background is the concern about unintended consequences.",
-        "image": "https://specials-images.forbesimg.com/imageserve/499948903/640x434.jpg?fit=scale",
-        "publisher": "Forbes",
-        "title": "Chatbots Will Be Your New Best Friend",
-        "url": "https://www.forbes.com/sites/christinecrandell/2016/10/23/chatbots-will-be-your-new-best-friend/",
-        "meta": {
-            "referrer": "origin-when-cross-origin",
-            "description": "Verizon is excited about chatbots and the advances in AI. Technology has provided huge benefits and it's easy to get carried away with the allure of human-machine relationships. Yet, lurking in the background is the concern about unintended consequences.",
-            "author": "Christine Crandell",
-            "viewport": "width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no",
-            "prerender-status-code": "{{meta.code}}",
-            "apple-itunes-app": "app-id=588647136",
-            "og:title": "Chatbots Will Be Your New Best Friend",
-            "og:site_name": "Forbes",
-            "og:url": "https://www.forbes.com/sites/christinecrandell/2016/10/23/chatbots-will-be-your-new-best-friend/",
-            "og:image": "https://specials-images.forbesimg.com/imageserve/499948903/640x434.jpg?fit=scale",
-            "og:image:type": "image/jpeg,image/gif,image/png",
-            "og:description": "Verizon is excited about chatbots and the advances in AI. Technology has provided huge benefits and it's easy to get carried away with the allure of human-machine relationships. Yet, lurking in the background is the concern about unintended consequences.",
-            "og:updated_time": "2017-07-02T13:24:01-04:00",
-            "article:publisher": "https://www.facebook.com/forbes",
-            "article:author": "http://www.facebook.com/https://www.facebook.com/NewBusinessStrategies",
-            "fb:app_id": "123694841080850",
-            "twitter:card": "summary_large_image",
-            "twitter:site": "@forbes",
-            "twitter:title": "Chatbots Will Be Your New Best Friend",
-            "twitter:description": "Verizon is excited about chatbots and the advances in AI. Technology has provided huge benefits and it's easy to get carried away with the allure of human-machine relationships. Yet, lurking in the background is the concern about unintended consequences.",
-            "twitter:image": "https://specials-images.forbesimg.com/imageserve/499948903/640x434.jpg?fit=scale",
-            "og:type": "article",
-            "article:section": "Tech",
-            "article:section_url": "//www.forbes.com/technology/",
-            "article:id": "blogAndPostId/blog/post/1274-925",
-            "article:published": "2016-10-23",
-            "article:modified": "2017-07-02",
-            "twitter:creator": "@ChrisCrandell"
-        }
-    }
-];
+const data =  [ { author: 'Erwin Van Lun',
+    date: '2017-07-19T11:00:00.000Z',
+    description: `Chatbot directory, all virtual agents,  virtual agents, chatbots,  chat bots,  conversational agents and chatterbots listed), virtual agent list
+, virtual assistant overview, chatterbot, chat bot,  conversational agent`,
+    image: 'https://www.chatbots.org/design/chatbotsorg_homepage.jpg',
+    publisher: 'Chatbots.org',
+    title: 'Chatbots.org - Virtual assistants, virtual agents, chat bots, conversational agents, chatterbots, chatbots: examples, companies, news,directory',
+    url: 'https://www.chatbots.org/',
+    totalVideos: 0,
+    totalImages: 52,
+    totalShareCount: 725,
+    readabilityScore: 96 },
+  { author: '10203247768089464',
+    date: '2016-04-20T11:46:02.836Z',
+    description: 'Everything you need to know.',
+    image: 'https://cdn-images-1.medium.com/max/1200/1*QNDwvpEdMtiv18XIJe0Ukg.png',
+    publisher: 'Chatbots Magazine',
+    title: 'The Complete Beginner’s Guide To Chatbots – Chatbots Magazine',
+    url: 'https://chatbotsmagazine.com/the-complete-beginner-s-guide-to-chatbots-8280b7b906ca',
+    totalVideos: 5,
+    totalImages: 23,
+    totalShareCount: 2552,
+    readabilityScore: 96 },
+  { author: null,
+    date: '2017-01-30T12:00:00.000Z',
+    description: null,
+    image: '//upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Telegram_tourism_chatbot.png/200px-Telegram_tourism_chatbot.png',
+    publisher: null,
+    title: 'Chatbot - Wikipedia',
+    url: 'https://en.wikipedia.org/wiki/Chatbot',
+    totalVideos: 0,
+    totalImages: 4,
+    totalShareCount: 133,
+    readabilityScore: 96 },
+  { author: 'John Rampton',
+    date: '2017-02-28T19:30:00.000Z',
+    description: 'Having a website became standard for every business years ago. That same process is just beginning for chatbots.',
+    image: 'https://assets.entrepreneur.com/content/3x2/1300/20170227225902-GettyImages-555799115.jpeg',
+    publisher: 'Entrepreneur',
+    title: 'Top 10 Best Chatbot Platform Tools to Build Chatbots for Your Business',
+    url: 'https://www.entrepreneur.com/article/289788',
+    totalVideos: 1,
+    totalImages: 9,
+    totalShareCount: 2917,
+    readabilityScore: 96 },
+  { author: null,
+    date: null,
+    description: 'Cleverbot - Chat with a bot about anything and everything - AI learns from people, in context, and imitates',
+    image: null,
+    publisher: 'Cleverbot',
+    title: 'Cleverbot',
+    url: 'http://www.cleverbot.com/',
+    totalVideos: 0,
+    totalImages: 67,
+    totalShareCount: 825472,
+    readabilityScore: 96 },
+  { author: 'Bi Intelligence',
+    date: '2016-12-14T00:00:00.000Z',
+    description: 'Businesses are beginning to see the benefits of using chatbots for their consumer-facing products',
+    image: 'http://static3.uk.businessinsider.com/image/585161f7dd089526558b4ccb-1190-625/80-of-businesses-want-chatbots-by-2020.jpg',
+    publisher: 'Business Insider',
+    title: '80% of businesses want chatbots by 2020',
+    url: 'http://uk.businessinsider.com/80-of-businesses-want-chatbots-by-2020-2016-12',
+    totalVideos: 2,
+    totalImages: 13,
+    totalShareCount: undefined,
+    readabilityScore: undefined },
+  { author: 'Blake Morgan',
+    date: '2017-06-08T00:00:00.000Z',
+    description: `Customers are ready for chatbots, and the technology is here to take advantage of chatbot’s potential and forever change how brands engage with
+customers. Chatbot technology is constantly improving, and it can be applied to a number of industries and has had success in just about every space.`,
+    image: 'https://specials-images.forbesimg.com/imageserve/548473441/640x434.jpg?fit=scale',
+    publisher: 'Forbes',
+    title: 'How Chatbots Improve Customer Experience In Every Industry: An Infograph',
+    url: 'https://www.forbes.com/sites/blakemorgan/2017/06/08/how-chatbots-improve-customer-experience-in-every-industry-an-infograph/',
+    totalVideos: 0,
+    totalImages: 7,
+    totalShareCount: 1384,
+    readabilityScore: 96 },
+  { author: null,
+    date: null,
+    description: 'Affordable Chatbot Development Online Services. Hire a freelance chat bot specialist and get your project delivered remotely online',
+    image: 'https://assetsv2.fiverrcdn.com/assets/v2_globals/fiverr-logo-new-green-9e65bddddfd33dfcf7e06fc1e51a5bc5.png',
+    publisher: 'Fiverr.com',
+    title: 'Chatbot Creation | Fiverr',
+    url: 'https://www.fiverr.com/categories/programming-tech/chatbots',
+    totalVideos: 1,
+    totalImages: 3,
+    totalShareCount: 3,
+    readabilityScore: 96 },
+  { author: 'Tamjul 19',
+    date: '2017-07-19T16:33:42.950Z',
+    description: 'Chatbots, AI, NLP, Facebook Messenger, Slack, Telegram, and more.',
+    image: 'https://cdn-images-1.medium.com/max/1200/1*21YIHiEOUohoIT7_9Khrig.png',
+    publisher: 'Chatbots Magazine',
+    title: 'Chatbots Magazine',
+    url: 'https://chatbotsmagazine.com/',
+    totalVideos: 0,
+    totalImages: 27,
+    totalShareCount: 593,
+    readabilityScore: 96 } ]
 
 class SearchFacade {
     search(searchText) {
@@ -323,12 +114,49 @@ class SearchFacade {
             //     q: searchText,
             //     max: 10
             // }).then(links => {
-            //     async.map(links, metadataHelper.getMetaData,  function (err, results){
-            //        let filteredData = results.filter((result)=>{
-            //             return result.url;
-            //         })
-            //         resolve(filteredData);
+            //     async.parallel([
+            //         (callback) => {
+            //             async.map(links, metadataHelper.getMetaData, function (err, results) {
+            //                 let filteredData = results.filter((result) => {
+            //                     return result.url;
+            //                 })
+            //                 callback(null, filteredData);
+            //             });
+            //         },
+            //         (callback) => {
+            //             async.map(links, socialShareCont.getShareCount, function (err, results) {
+            //                 callback(null, results);
+            //             });
+            //         },
+            //         (callback) => {
+            //             async.map(links, readabilityScore.getScore, function (err, results) {
+            //                 callback(null, results);
+            //             });
+            //         },
+
+            //     ], (err, results) => {
+
+            //         let metadata = results[0];
+            //         let shareCounts = results[1].reduce(function (sum, value) {
+            //             return Object.assign(sum, value)
+            //         }, {});;
+            //         let readabilityScores = results[2].reduce(function (sum, value) {
+            //             return Object.assign(sum, value)
+            //         }, {});;
+            //         console.log(metadata);
+            //         console.log('----------------------------------------------------');
+            //         console.log(shareCounts);
+            //         console.log('----------------------------------------------------');
+            //         console.log(readabilityScores);
+            //         metadata.forEach((data) => {
+            //             data['totalShareCount'] = shareCounts[data.url];
+            //             data['readabilityScore'] = readabilityScores[data.url];
+            //         });
+            //         resolve(metadata);
+
             //     });
+
+
             // });
             resolve(data);
         });
