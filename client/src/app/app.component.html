@@ -1,12 +1,14 @@
 <!--The whole content below can be removed with the new code.-->
 <md-sidenav-container>
-  <md-toolbar color="primary">
-  <span>QUAENT</span>
+  <div class="header">
+  <md-toolbar >
+  <span><h1>QUAENT</h1></span>
 
 </md-toolbar>
+ </div>
 <div>
-  <div>
-    <h1> {{title}} </h1>
+  <div class="centered">
+    <h3> {{title}} </h3>
     <input name="search" #searchTerm (keyup.enter)="performSearch(searchTerm.value)" (blur)="performSearch(searchTerm.value); searchTerm.value='' "> <button (click)="performSearch(searchTerm.value)">Search</button>    <br>
   </div>
   <br/>
