@@ -15,11 +15,14 @@ export class AppComponent {
 
   constructor(private searchService: SearchService) { }
 
-  performSearch(searchTerm){
-    console.log(searchTerm);
+  performSearch(searchTerm: string){
+    if(searchTerm){
+    console.log("searchTerm::",searchTerm);
     this.searchService.searchEntries(searchTerm)
       .subscribe(results => {
+        console.log(results);
         this.results = results;
       });
   }
+ }
 }

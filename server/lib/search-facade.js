@@ -5,10 +5,10 @@ const readabilityScore = require('./redability-score');
 //
 const async = require('async');
 
-const data =  `[ { author: 'Erwin Van Lun',
+const data =  [ { author: 'Erwin Van Lun',
     date: '2017-07-19T11:00:00.000Z',
-    description: 'Chatbot directory, all virtual agents,  virtual agents, chatbots,  chat bots,  conversational agents and chatterbots listed), virtual agent list
-, virtual assistant overview, chatterbot, chat bot,  conversational agent',
+    description: `Chatbot directory, all virtual agents,  virtual agents, chatbots,  chat bots,  conversational agents and chatterbots listed), virtual agent list
+, virtual assistant overview, chatterbot, chat bot,  conversational agent`,
     image: 'https://www.chatbots.org/design/chatbotsorg_homepage.jpg',
     publisher: 'Chatbots.org',
     title: 'Chatbots.org - Virtual assistants, virtual agents, chat bots, conversational agents, chatterbots, chatbots: examples, companies, news,directory',
@@ -74,8 +74,8 @@ const data =  `[ { author: 'Erwin Van Lun',
     readabilityScore: undefined },
   { author: 'Blake Morgan',
     date: '2017-06-08T00:00:00.000Z',
-    description: 'Customers are ready for chatbots, and the technology is here to take advantage of chatbot’s potential and forever change how brands engage with
-customers. Chatbot technology is constantly improving, and it can be applied to a number of industries and has had success in just about every space.',
+    description: `Customers are ready for chatbots, and the technology is here to take advantage of chatbot’s potential and forever change how brands engage with
+customers. Chatbot technology is constantly improving, and it can be applied to a number of industries and has had success in just about every space.`,
     image: 'https://specials-images.forbesimg.com/imageserve/548473441/640x434.jpg?fit=scale',
     publisher: 'Forbes',
     title: 'How Chatbots Improve Customer Experience In Every Industry: An Infograph',
@@ -105,7 +105,7 @@ customers. Chatbot technology is constantly improving, and it can be applied to 
     totalVideos: 0,
     totalImages: 27,
     totalShareCount: 593,
-    readabilityScore: 96 } ]`
+    readabilityScore: 96 } ]
 
 class SearchFacade {
     search(searchText) {

@@ -7,7 +7,7 @@
 <div>
   <div>
     <h1> {{title}} </h1>
-    <input name="search" #searchTerm (keyup.enter)="performSearch($event.target.value)"> <button (click)="performSearch(searchTerm)">Search</button>    <br>
+    <input name="search" #searchTerm (keyup.enter)="performSearch(searchTerm.value)" (blur)="performSearch(searchTerm.value); searchTerm.value='' "> <button (click)="performSearch(searchTerm.value)">Search</button>    <br>
   </div>
   <br/>
 
@@ -19,7 +19,7 @@
     <!-- <a href="{{ result.url }}" target="_blank">
       {{ result.title }}
     </a> -->
-  <!-- 
+  <!--
   </li>
 </ul> -->
 
@@ -30,7 +30,7 @@
           <md-card-header>
             <img md-card-avatar src="{{ result.image }}">
             <md-card-title> {{ result.title }}</md-card-title>
-            
+
           </md-card-header>
          <!--  -->
           <md-card-content>
