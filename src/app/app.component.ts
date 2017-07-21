@@ -10,7 +10,7 @@ import { Subject } from 'rxjs/Subject';
 })
 export class AppComponent {
   results: Object;
-  title ='Quality Content Search...';
+  title ='Search quality content from the web...';
 
   constructor(private searchService: SearchService) { }
 

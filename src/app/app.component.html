@@ -1,29 +1,57 @@
 <!--The whole content below can be removed with the new code.-->
-<div >
-  <div class="header">
-    <span><h1>QUAENT</h1></span>
-  </div>
-  <div>
-    <div class="centered">
-      <h3> {{title}} </h3>
-      <input name="search" #searchTerm (keyup.enter)="performSearch(searchTerm.value)" (blur)="performSearch(searchTerm.value); searchTerm.value='' ">      <button (click)="performSearch(searchTerm.value)">Search</button> <br>
+<div class="container-fluid">
+  <nav class="navbar navbar-inverse bg-inverse">
+    <div class="row">
+      <div class="col">
+        <span class="navbar-text"><h1>QUAENT</h1> {{title}}</span>
+      </div>
     </div>
-    <br/>
-
-  <div class="container" *ngIf="results">
+  </nav>
+  <br/>
   <div class="row justify-content-md-center">
-    <div class="col-12 col-md-auto" *ngFor="let result of results | slice:0:20">
-       <div class="card" style="width: 20rem;">
-          <img class="card-img-top" src="{{ result.image }}" style="height: 5rem;" alt="Card image cap">
+    <input class="form-control mr-sm-2" type="text" placeholder="Search" style="width: 20rem;" name="search" #searchTerm (keyup.enter)="performSearch(searchTerm.value)"
+      (blur)="performSearch(searchTerm.value); searchTerm.value='' ">
+    <button (click)="performSearch(searchTerm.value)" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+  </div>
+  <br/>
+
+  <div class="row" *ngIf="results">
+    <div class="row justify-content-md-center">
+      <div class="col-12 col-md-auto" *ngFor="let result of results | slice:0:20">
+        <div class="card" style="width: 20rem;">
+           <img class="card-img-top" src="{{ result.image }}" style="height: 5rem;" alt="Card image cap"> 
           <div class="card-block">
-            <h4 class="card-title">{{ result.title }}</h4>
-            <p class="card-text">{{ result.title }}</p>
-            <a href="{{ result.url }}" class="btn btn-primary" target="_blank">View</a>
+            <h6 class="card-title">{{ result.title }}</h6>
+            <p class="card-text">
+              <div style="color: #00b3ee">Published on: {{ result.date | date }}</div>
+              <div style="color: #006400">Quality Score: {{ 56 }}</div>
+              <p class="card-text">
+                <p class="card-text">{{ result.description }}</p>
+                <a href="{{ result.url }}" class="btn btn-primary" target="_blank">View</a>
+                 <button [popover]="myPopover" class="btn btn-info">Info</button>
+                 <div class="row">
+                  <popover-content #myPopover title="Content Quality Metrics" [closeOnClickOutside]="true">
+                    <div class="row" >
+                       <span style="color: #800000"><b>Total Shares : </b></span>
+                        <span>{{ result.totalShareCount }}</span>
+                     </div>
+                      <div class="row">
+                      <span style="color: #800000"><b>Flesch Reading Ease scale : </b></span>
+                        <span>{{ result.readabilityScore }}</span>
+                     </div>
+                       <div class="row">
+                      <span style="color: #800000"><b>Images : </b></span>
+                        <span>{{ result.totalImages }}</span>
+                     </div>
+                      <div class="row">
+                      <span style="color: #800000"><b>Videos : </b></span>
+                        <span>{{ result.totalVideos }}</span>
+                     </div>
+                  </popover-content>
+                </div>
           </div>
         </div>
+      </div>
     </div>
   </div>
 </div>
-
-    </div>
-  </div>

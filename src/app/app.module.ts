@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule }    from '@angular/http';
+import { PopoverModule }    from 'ng2-popover';
+ 
 
 
 import { AppComponent } from './app.component';
@@ -12,6 +14,7 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     HttpModule,
+    PopoverModule
   ],
   providers: [],
   bootstrap: [AppComponent]
