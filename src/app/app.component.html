@@ -19,7 +19,7 @@
     <div class="row justify-content-md-center">
       <div class="col-12 col-md-auto" *ngFor="let result of results | slice:0:20">
         <div class="card" style="width: 20rem;">
-           <img class="card-img-top" src="{{ result.image }}" style="height: 5rem;" alt="Card image cap"> 
+              <img class="image-responsive" src="{{ result.image }}" style="max-width: 100%;height: auto;display: block;" alt="Card image cap"> 
           <div class="card-block">
             <h6 class="card-title">{{ result.title }}</h6>
             <p class="card-text">
