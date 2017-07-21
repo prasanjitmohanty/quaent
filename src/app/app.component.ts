@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component,OnInit } from '@angular/core';
 import { SearchService } from './search.service';
 import { Subject } from 'rxjs/Subject';
+import {Subscription} from 'rxjs';
+
 
 @Component({
   selector: 'app-root',
@@ -8,16 +10,21 @@ import { Subject } from 'rxjs/Subject';
   styleUrls: ['./app.component.css'],
   providers: [SearchService]
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   results: Object;
   title ='Search quality content from the web...';
+  busy: Subscription;
+
+  ngOnInit() {
+       // this.busy = this.http.get('...').subscribe();
+    }
 
   constructor(private searchService: SearchService) { }
 
   performSearch(searchTerm: string){
     if(searchTerm){
     console.log("searchTerm::",searchTerm);
-    this.searchService.searchEntries(searchTerm)
+    this.busy = this.searchService.searchEntries(searchTerm)
       .subscribe(results => {
         console.log(results);
         this.results = results;

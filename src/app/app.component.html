@@ -8,13 +8,13 @@
     </div>
   </nav>
   <br/>
+  
   <div class="row justify-content-md-center">
-    <input class="form-control mr-sm-2" type="text" placeholder="Search" style="width: 20rem;" name="search" #searchTerm (keyup.enter)="performSearch(searchTerm.value)"
-      (blur)="performSearch(searchTerm.value); searchTerm.value='' ">
+    <input class="form-control mr-sm-2" type="text" placeholder="Search" style="width: 20rem;" name="search" #searchTerm (keyup.enter)="performSearch(searchTerm.value)">
     <button (click)="performSearch(searchTerm.value)" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
   </div>
   <br/>
-
+<div [ngBusy]="busy"></div>
   <div class="row" *ngIf="results">
     <div class="row justify-content-md-center">
       <div class="col-12 col-md-auto" *ngFor="let result of results | slice:0:20">
