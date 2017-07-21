@@ -8,7 +8,7 @@ import 'rxjs/add/operator/switchMap';
 
 @Injectable()
 export class SearchService {
-  baseUrl: string ='https://hidden-spire-31316.herokuapp.com/search/'; //'http://localhost:5000/search/';
+  baseUrl: string = 'http://localhost:5000/search/';//'https://hidden-spire-31316.herokuapp.com/search/';
   queryUrl: string = 'searchText=';
 
   constructor(private http: Http) { }

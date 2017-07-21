@@ -1,53 +1,29 @@
 <!--The whole content below can be removed with the new code.-->
-<md-sidenav-container>
+<div >
   <div class="header">
-  <md-toolbar >
-  <span><h1>QUAENT</h1></span>
-
-</md-toolbar>
- </div>
-<div>
-  <div class="centered">
-    <h3> {{title}} </h3>
-    <input name="search" #searchTerm (keyup.enter)="performSearch(searchTerm.value)" (blur)="performSearch(searchTerm.value); searchTerm.value='' "> <button (click)="performSearch(searchTerm.value)">Search</button>    <br>
+    <span><h1>QUAENT</h1></span>
   </div>
-  <br/>
-
-  <!--<input
-    (keyup)="searchTerm$.next($event.target.value)">-->
-
-  <!-- <ul *ngIf="results">
-  <li *ngFor="let result of results | slice:0:9">
-    <!-- <a href="{{ result.url }}" target="_blank">
-      {{ result.title }}
-    </a> -->
-  <!--
-  </li>
-</ul> -->
-
   <div>
-    <md-grid-list cols="5" rowHeight="1:1" *ngIf="results">
-      <md-grid-tile *ngFor="let result of results | slice:0:20">
-        <md-card>
-          <md-card-header>
-            <img md-card-avatar src="{{ result.image }}">
-            <md-card-title> {{ result.title }}</md-card-title>
+    <div class="centered">
+      <h3> {{title}} </h3>
+      <input name="search" #searchTerm (keyup.enter)="performSearch(searchTerm.value)" (blur)="performSearch(searchTerm.value); searchTerm.value='' ">      <button (click)="performSearch(searchTerm.value)">Search</button> <br>
+    </div>
+    <br/>
 
-          </md-card-header>
-         <!--  -->
-          <md-card-content>
-            <p>
-              {{ result.description }}
-            </p>
-          </md-card-content>
-          <md-card-actions>
-            <a href="{{ result.url }}" md-button target="_blank">
-           View
-          </a>
-          </md-card-actions>
-        </md-card>
-      </md-grid-tile>
-    </md-grid-list>
+  <div class="container" *ngIf="results">
+  <div class="row justify-content-md-center">
+    <div class="col-12 col-md-auto" *ngFor="let result of results | slice:0:20">
+       <div class="card" style="width: 20rem;">
+          <img class="card-img-top" src="{{ result.image }}" style="height: 5rem;" alt="Card image cap">
+          <div class="card-block">
+            <h4 class="card-title">{{ result.title }}</h4>
+            <p class="card-text">{{ result.title }}</p>
+            <a href="{{ result.url }}" class="btn btn-primary" target="_blank">View</a>
+          </div>
+        </div>
+    </div>
   </div>
 </div>
-</md-sidenav-container>
+
+    </div>
+  </div>
