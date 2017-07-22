@@ -24,7 +24,7 @@
             <h6 class="card-title">{{ result.title }}</h6>
             <p class="card-text">
               <div style="color: #00b3ee">Published on: {{ result.date | date }}</div>
-              <div style="color: #006400">Quality Score: {{ 56 }}</div>
+              <div style="color: #006400"><b>Quality Score: {{ result.contentQualityScore |number: '1.2-2' }}</b></div>
               <p class="card-text">
                 <p class="card-text">{{ result.description }}</p>
                 <a href="{{ result.url }}" class="btn btn-primary" target="_blank">View</a>
